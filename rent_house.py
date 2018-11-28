@@ -38,11 +38,11 @@ def house_crawler():
                 # 将数据写进csv
                 row_data = [comment,price,name,details,house_type]
                 writer.writerow(row_data)
-                time.sleep(0.1)
+                time.sleep(0.01)
             print("第%s页" % count)
             count += 1
 
-            #点击下一页
+            # 点击下一页
             next_page = browser.find_element_by_class_name("_b8vexar")
             next_page.click()
     finally:
@@ -50,12 +50,13 @@ def house_crawler():
 
 if __name__ == "__main__":
     # map_toggle=false 请求时不打开地图
-    url = r"https://zh.airbnb.com/s/Shenzhen--China/homes?refinement_paths%5B%5D=%2Fhomes&allow_override%5B%5D=&map_toggle=false&s_tag=vIkSZ4i2"
+    url = r"https://zh.airbnb.com/s/Shenzhen--China/homes?refinement_paths \
+            %5B%5D=%2Fhomes&allow_override%5B%5D=&map_toggle=false&s_tag=vIkSZ4i2"
 
     path = os.getcwd() + "\\租房信息.csv"
 
     f = open(path,"w",encoding="utf-8")
-    #写入csv
+    # 写入csv
     writer = csv.writer(f)
     title = ["评价","价格","名字","细节","房子类型"]
     writer.writerow(title)
