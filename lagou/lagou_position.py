@@ -6,9 +6,9 @@ from setting import Settings
 def get_info():
     """获取职位信息"""
     try:
-        html = requests.post(url,data=params,headers=headers)
+        html = requests.post(url, data=params, headers=headers)
         json_data = json.loads(html.text)
-        #获取json数据里面的职位信息
+        # 获取json数据里面的职位信息
         results = json_data["content"]["positionResult"]["result"]
         
         for result in results:
@@ -22,8 +22,9 @@ def get_info():
             industry = "".join(result["industryLables"])
             salary = result["salary"]
             
-            info = [company_name, position_name,industry,company_size,finance_stage,company_position,work_year,education,salary]
-            #写入csv文件
+            info = [company_name, position_name, industry, company_size,
+                    finance_stage, company_position, work_year, education,salary]
+            # 写入csv文件
             writer.writerow(info)
             time.sleep(0.05)
 
@@ -32,14 +33,15 @@ def get_info():
 
 if __name__ == "__main__":
     city_name = "深圳"
-    #文件保存地址
+    # 文件保存地址
     path = os.getcwd() + r"\lagou{}.csv".format(city_name)
     f = open(path, "w",encoding="utf-8")
     writer = csv.writer(f)
-    title = ["name","position","industry","company_size","finance_stage","location","experience","education","salary"]
+    title = ["name", "position", "industry", "company_size", "finance_stage",
+             "location", "experience", "education", "salary"]
     writer.writerow(title)
 
-    #构造请求头
+    # 构造请求头
     headers = Settings.headers
     url = r"https://www.lagou.com/jobs/positionAjax.json?city=" + city_name
 
