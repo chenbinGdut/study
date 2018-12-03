@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 from wordcloud import WordCloud
+from matplotlib.ticker import MultipleLocator
+from matplotlib.ticker import  FormatStrFormatter
 
 
 class TieMat():
@@ -21,7 +25,6 @@ class TieMat():
         plt.axis('equal')
         # 图例
         ax.legend(loc=3)
-        plt.show()
         plt.savefig('发帖来源饼图')
         
     def level_bar(self, data):
@@ -40,9 +43,8 @@ class TieMat():
         # 显示图标题
         plt.title("用户等级分布条形图", fontsize=19)
         for a,b in zip(x,y):
-            plt.text(a, b + 1000, '%.0f'%b, ha='center', 
+            plt.text(a, b + 1000, '%d'%b, ha='center', 
                      va='bottom', fontsize=10)
-        plt.show()
         plt.savefig('用户等级分布条形图')
     
     def time_plot(self, data):
@@ -50,16 +52,23 @@ class TieMat():
         # 取发帖时间的小时作为发帖时间
         data['create_time'] = data['create_time'].str[:2]
         y = data['create_time'].value_counts()
+        y = y.sort_index()
         x = y.index
-        label = [str(i) + '时' for i in range(0,24)]
         # 折线图
-        plt.figure(figsize=(12,9))
-        plt.plot(x, y)
-        plt.xticks(x, label)
-        plt.xlabel('发帖时间', fontsize=15)
-        plt.title('用户发帖时间折线图', fontsize=19)
-        plt.show()
-        plt.savefig('用户发帖时间折线图')
+        x_major = MultipleLocator(4)
+        x_minor = MultipleLocator(1)
+        # 设置x轴标签文本的格式
+        x_formatter = FormatStrFormatter('%d时') 
+        fig, ax = plt.subplots(figsize=(12,9))
+        ax.plot(x, y)
+        #设置主刻度标签
+        ax.xaxis.set_major_locator(x_major)
+        ax.xaxis.set_major_formatter(x_formatter)
+        ax.xaxis.set_minor_locator(x_minor)
+        
+        ax.set_xlabel('发帖时间', fontsize=15)
+        ax.set_title('用户发帖时间折线图', fontsize=19)
+        plt.savefig('用户发帖时间折线图1')
         
     def name_wordcloud(self, data):
         "昵称词云图"
@@ -76,7 +85,6 @@ class TieMat():
         plt.axis('off')
         # 保存图片
         w.to_file('昵称词云图.png')
-        plt.show()
         
 if __name__ == "__main__":
     data = pd.read_csv('hai.csv')
